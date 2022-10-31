@@ -18,9 +18,18 @@
 {{! Pagination buttons }}
 {{> pagination/pagination_bar pagination=pagination prefix=prefix preserved_query_string=preserved_query_string}}
 
-<a class="btn btn-primary w-10 mb-1" target="_blank" download href="/admin/download/enrollments/{{id}}">
-    Export to CSV
-</a>
+<div class="my-2">
+    <div class="w-10 d-inline-block">
+        <a class="btn btn-primary w-10 mr-2" target="_blank" download href="/admin/download/enrollments/{{id}}">
+            Export to CSV
+        </a>
+    </div>
+    <div class="w-10 d-inline-block">
+        <a class="btn btn-primary w-10 mr-2" href="/admin/semesters/{{id}}/upload">
+            Upload Enrollment CSV
+        </a>
+    </div>
+</div>
 
 {{#each data}}
     <div class="my-2 card text-dark">

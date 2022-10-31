@@ -1,0 +1,6 @@
+mutation InsertEnrollment($user_id: uuid!, $semester_id: String!, $credits: Int!) {
+  insert_enrollments_one(object: {user_id: $user_id, semester_id: $semester_id, credits: $credits}) {
+    user_id
+  }
+}
+

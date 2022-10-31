@@ -16,6 +16,8 @@ toml = "~0.5"
 
 # actix actor framework -- system for running server and other tasks.
 actix = "0.10.0"
+# actix easy multipart -- easy deserialization for multipart form data
+actix-easy-multipart = "1.0.0"
 # actix web server
 actix-web = {version = "3.3.3", features = ["rustls"]}
 # static file serving

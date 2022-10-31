@@ -1,0 +1,11 @@
+query UserAccountsByRCSID($account_id: String!) {
+  user_accounts(where: {account_id: {_eq: $account_id}}) {
+    user_id
+  }
+  user_accounts_aggregate(where: {account_id: {_eq: $account_id}}) {
+    aggregate {
+      count
+    }
+  }
+}
+

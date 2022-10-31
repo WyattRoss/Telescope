@@ -1,5 +1,5 @@
 # Use latest rust (by explicit version to avoid getting a stale release)
-FROM rust:1.58.1
+FROM rust:1.64.0
 
 # Set timezone
 ENV TZ=America/New_York

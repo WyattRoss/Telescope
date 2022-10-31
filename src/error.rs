@@ -141,6 +141,9 @@ pub enum TelescopeError {
     /// Error sending to or receiving from the RPI CAS system.
     /// This should report as a Gateway error.
     RpiCasError(String),
+
+    #[display(fmt = "Invalid csv data")]
+    CSVError,
 }
 
 impl TelescopeError {
@@ -229,6 +232,11 @@ impl TelescopeError {
                     err
                 ),
             ),
+
+            TelescopeError::CSVError => jumbotron::new(
+                format!("{} - CSV Error", status_code),
+                format!("Please make sure your CSV is formatted correctly."),
+                ),
 
             TelescopeError::BadRequest { header, message, show_status_code} => {
                 jumbotron::new(
