@@ -6,6 +6,8 @@ use crate::api::rcos::users::accounts::link::LinkUserAccount;
 use crate::api::rcos::users::accounts::lookup::AccountLookup;
 use crate::api::rcos::users::accounts::reverse_lookup::ReverseLookup;
 use crate::api::rcos::users::UserAccountType;
+use crate::api::rcos::users::accounts::user_accounts_by_rcsid::UserAccountsByRCSID;
+use crate::api::rcos::users::clean_merge::CleanMerge;
 use crate::error::TelescopeError;
 
 use crate::web::services::auth::identity::{AuthenticationCookie, RootIdentity};
@@ -298,7 +300,17 @@ impl IdentityProvider for RpiCas {
             // Add to database if needed.
             if add_new_to_db {
                 // Link the account.
-                LinkUserAccount::send(user_id, Self::USER_ACCOUNT_TY, new_rcs_id.clone()).await?;
+                let mut account_get = UserAccountsByRCSID::get(new_rcs_id.clone()).await?;
+                match account_get.user_accounts_aggregate.aggregate.unwrap().count {
+                    0 => {
+                        LinkUserAccount::send(user_id, Self::USER_ACCOUNT_TY, new_rcs_id.clone()).await?;
+                        info!("Successful link")
+                        },
+                    _ => {
+                        CleanMerge::execute(user_id, account_get.user_accounts.pop().unwrap().user_id).await?;
+                        info!("Merged accounts")
+                        },
+                };
             }
 
             // Throw an error if the new RCS ID doesn't match the linked one.

@@ -1,0 +1,42 @@
+mutation CleanMerge($first_id: uuid!, $merge_id: uuid!) {
+  update_bonus_attendances(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_enrollments(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_final_grade_appeal(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_meeting_attendances(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_meetings(where: {host_user_id: {_eq: $merge_id}}, _set: {host_user_id: $first_id}) {
+    affected_rows
+  }
+  update_mentor_proposals(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_pay_requests(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_project_pitches(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_small_group_mentors(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_status_update_submissions(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_workshop_proposals(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  update_user_accounts(where: {user_id: {_eq: $merge_id}}, _set: {user_id: $first_id}) {
+    affected_rows
+  }
+  delete_users_by_pk(id: $merge_id) {
+    id
+  }
+}
+

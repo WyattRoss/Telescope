@@ -10,6 +10,7 @@ pub mod enrollments;
 pub mod navbar_auth;
 pub mod profile;
 pub mod role_lookup;
+pub mod clean_merge;
 
 /// The valid user roles for all users in the RCOS database.
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Eq, PartialEq, Hash, Display)]
