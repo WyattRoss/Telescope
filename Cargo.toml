@@ -94,7 +94,7 @@ graphql_client = "0.10.0"
 # Discord API and integration
 # Serenity for sharding and models
 [dependencies.serenity]
-version = "0.10.10"
+version = "0.11.5"
 features = [
     # Builder stype methods on Discord's API objects
     "builder",
@@ -112,7 +112,6 @@ features = [
     "unstable_discord_api",
     # Utility functionality
     "utils",
-    # Rustls with tokio 0.2 for compatibility with actix.
-    "rustls_tokio_0_2_backend"
+    "rustls_backend"
 ]
 default-features = false

@@ -12,6 +12,7 @@ use crate::discord_bot::commands::InteractionResult;
 use crate::env::global_config;
 use serenity::builder::{CreateApplicationCommand, CreateApplicationCommandOption, CreateEmbed};
 use serenity::client::Context;
+use serenity::model::Timestamp;
 use serenity::model::channel::{
     ChannelType as SerenityChannelType, PermissionOverwrite, PermissionOverwriteType,
 };
@@ -50,7 +51,7 @@ fn generate_permission(project_role: Option<RoleId>, roles: Vec<Role>) -> Vec<Pe
         if role.name == "@everyone" {
             overwrite.push(PermissionOverwrite {
                 allow: Permissions::empty(),
-                deny: Permissions::READ_MESSAGES,
+                deny: Permissions::READ_MESSAGE_HISTORY,
                 kind: PermissionOverwriteType::Role(role.id),
             })
             // Grant permission for Faculty Advisors, Coordinators and Sysadmins.
@@ -66,7 +67,7 @@ fn generate_permission(project_role: Option<RoleId>, roles: Vec<Role>) -> Vec<Pe
     // If roles for the project have been generated, also grant permission for users who have the roles.
     if let Some(r) = project_role {
         overwrite.push(PermissionOverwrite {
-            allow: Permissions::READ_MESSAGES
+            allow: Permissions::READ_MESSAGE_HISTORY
                 | Permissions::SEND_MESSAGES
                 | Permissions::EMBED_LINKS
                 | Permissions::ATTACH_FILES
@@ -98,15 +99,16 @@ async fn interaction_error(
                         .allowed_mentions(|am| am.empty_parse())
                         // Use the ephemeral flag to mark the response as only visible to the user who invoked it.
                         .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                        .create_embed(|embed| {
+                        .set_embed(
                             // Add common attributes
-                            embed_common(embed)
+                            embed_common()
                                 .color(ERROR_COLOR)
                                 .title(error_title)
                                 .description(error_description)
                                 // Include the error as a field of the embed.
                                 .field("Error Message", err, false)
-                        })
+                                .clone()
+                        )
                 })
         })
         .await;
@@ -128,10 +130,10 @@ async fn interaction_success(
                         .allowed_mentions(|am| am.empty_parse())
                         // Use the ephemeral flag to mark the response as only visible to the user who invoked it.
                         .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                        .create_embed(|embed| {
+                        .set_embed(
                             // Add common attributes
-                            embed_common(embed).title("OK").description(description)
-                        })
+                            embed_common().title("OK").description(description).clone()
+                        )
                 })
         })
         .await;
@@ -238,15 +240,16 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                             .allowed_mentions(|am| am.empty_parse())
                             // Use the ephemeral flag to mark the response as only visible to the user who invoked it.
                             .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                            .create_embed(|embed| {
+                            .set_embed(
                                 // Add common attributes
-                                embed_common(embed)
+                                embed_common()
                                     .color(ERROR_COLOR)
                                     .title("Permission Error")
                                     .description("You need Coordinator/Faculty Advisor role.")
                                     // Include the error as a field of the embed.
                                     .field("Error Message", "Permission Error", false)
-                            })
+                                    .clone()
+                            )
                     })
             })
             .await;
@@ -306,15 +309,16 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                                 .allowed_mentions(|am| am.empty_parse())
                                 // Use the ephemeral flag to mark the response as only visible to the user who invoked it.
                                 .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                                .create_embed(|embed| {
+                                .set_embed(
                                     // Add common attributes
-                                    embed_common(embed)
+                                    embed_common()
                                         .color(ERROR_COLOR)
                                         .title("Option Error")
                                         .description("Wrong option name .")
                                         // Include the error as a field of the embed.
                                         .field("Error Message", "Option Error", false)
-                                })
+                                        .clone()
+                                )
                         })
                 })
                 .await;
@@ -323,10 +327,10 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
 }
 
 /// Add common data to a Discord embed. This includes the author, footer, and timestamp.
-fn embed_common(create_embed: &mut CreateEmbed) -> &mut CreateEmbed {
-    create_embed
+fn embed_common() -> CreateEmbed {
+    CreateEmbed::default()
         // Timestamp is always now
-        .timestamp(&chrono::Utc::now())
+        .timestamp(Timestamp::now())
         // Footer is telescope version
         .footer(|create_footer| {
             create_footer.text(format!("Telescope {}", env!("CARGO_PKG_VERSION")))
@@ -338,6 +342,7 @@ fn embed_common(create_embed: &mut CreateEmbed) -> &mut CreateEmbed {
                 .name("Telescope")
                 .url("https://github.com/rcos/Telescope")
         })
+        .clone()
 }
 
 // handler for /generate channel commands

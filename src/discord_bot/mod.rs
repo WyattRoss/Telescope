@@ -8,6 +8,7 @@ use crate::env::{global_config, DiscordConfig};
 use actix::{Actor, ActorContext, ActorFuture, AsyncContext, Context, Supervised};
 use futures::future::LocalBoxFuture;
 use futures::Future;
+use serenity::prelude::GatewayIntents;
 use serenity::{Client, Result as SerenityResult};
 use std::pin::Pin;
 use std::task::Context as StdContext;
@@ -29,8 +30,10 @@ impl DiscordBot {
             .parse::<u64>()
             .expect("Could not parse Discord Application ID.");
 
+        let intents = GatewayIntents::from_bits(8791279681);
+
         // Instantiate a serenity Discord client.
-        return Client::builder(&discord_conf.bot_token)
+        return Client::builder(&discord_conf.bot_token, intents.unwrap_or(GatewayIntents::default()))
             .event_handler(Handler)
             .application_id(app_id)
             .await;

@@ -91,7 +91,7 @@ pub async fn register_commands_for_guild(ctx: &mut Context, guild: &Guild) -> se
         // Populate the objects fields using the builder method for this command.
         (cmd.builder)(&mut command_builder);
         // Convert serenity's hashmap to a JSON map.
-        let json_map = serenity::utils::hashmap_to_json_map(command_builder.0);
+        let json_map = serenity::json::hashmap_to_json_map(command_builder.0);
         // And put that map in a JSON value.
         let json_value = serde_json::Value::Object(json_map);
 

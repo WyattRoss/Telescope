@@ -29,6 +29,9 @@ pub struct DiscordConfig {
 
     /// The RCOS Discord Guild ID.
     pub rcos_guild_id: String,
+
+    /// The Application ID used to make the API client
+    pub application_id: u64,
 }
 
 impl DiscordConfig {

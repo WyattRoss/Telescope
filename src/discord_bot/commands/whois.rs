@@ -5,6 +5,7 @@ use crate::discord_bot::commands::InteractionResult;
 use crate::env::global_config;
 use serenity::builder::{CreateApplicationCommand, CreateApplicationCommandOption, CreateEmbed};
 use serenity::client::Context;
+use serenity::model::Timestamp;
 use serenity::model::interactions::application_command::ApplicationCommandInteraction;
 use serenity::model::interactions::{
     application_command::ApplicationCommandOptionType, InteractionResponseType,
@@ -94,9 +95,9 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                             .allowed_mentions(|am| am.empty_parse())
                             // Use the ephemeral flag to mark the response as only visible to the user who invoked it.
                             .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                            .create_embed(|embed| {
+                            .set_embed(
                                 // Add common attributes
-                                embed_common(embed)
+                                embed_common()
                                     .color(ERROR_COLOR)
                                     .title("RCOS API Error")
                                     .description(
@@ -106,7 +107,8 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                                     )
                                     // Include the error as a field of the embed.
                                     .field("Error Message", err, false)
-                            })
+                                    .clone()
+                            )
                     })
             })
             .await;
@@ -126,9 +128,9 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                         .allowed_mentions(|am| am.empty_parse())
                         // Use the ephemeral flag to hide the response from everyone except the user who invoked it.
                         .flags(InteractionApplicationCommandCallbackDataFlags::EPHEMERAL)
-                        .create_embed(|create_embed| {
+                        .set_embed({
                             // Set common embed fields (author, footer, timestamp)
-                            embed_common(create_embed);
+                            let mut create_embed = embed_common();
 
                             // Set remaining fields based on user
                             if let Some(u) = rcos_user {
@@ -147,12 +149,13 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
                                     .map(|o| format!("{}@rpi.edu", o.account_id))
                                     .unwrap_or("RPI CAS not linked to this user.".into());
 
-                                create_embed.field("RPI Email", rcs_id, true)
+                                create_embed.field("RPI Email", rcs_id, true);
                             } else {
                                 create_embed
                                     .color(ERROR_COLOR)
-                                    .description("User not found in RCOS database.")
+                                    .description("User not found in RCOS database.");
                             }
+                            create_embed.clone()
                         })
                 })
         })
@@ -160,10 +163,10 @@ async fn handle(ctx: &Context, interaction: &ApplicationCommandInteraction) -> S
 }
 
 /// Add common data to a Discord embed. This includes the author, footer, and timestamp.
-fn embed_common(create_embed: &mut CreateEmbed) -> &mut CreateEmbed {
-    create_embed
+fn embed_common() -> CreateEmbed {
+    CreateEmbed::default()
         // Timestamp is always now
-        .timestamp(&chrono::Utc::now())
+        .timestamp(Timestamp::now())
         // Footer is telescope version
         .footer(|create_footer| {
             create_footer.text(format!("Telescope {}", env!("CARGO_PKG_VERSION")))
@@ -175,4 +178,5 @@ fn embed_common(create_embed: &mut CreateEmbed) -> &mut CreateEmbed {
                 .name("Telescope")
                 .url("https://github.com/rcos/Telescope")
         })
+        .clone()
 }

@@ -23,7 +23,7 @@ use chrono::{DateTime, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc
 use serde_json::Value;
 use uuid::Uuid;
 
-/// The handlebars template for the user to select a host.
+
 const HOST_SELECTION_TEMPLATE: &'static str = "meetings/creation/host_selection";
 
 /// The handlebars template to finish the meeting creation process.

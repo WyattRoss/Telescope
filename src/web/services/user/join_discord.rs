@@ -10,7 +10,7 @@ use actix_web::HttpResponse;
 use reqwest::header::LOCATION;
 use serenity::builder::EditMember;
 use serenity::model::prelude::RoleId;
-use serenity::utils;
+use serenity::json;
 
 /// Let users into the RCOS discord.
 #[get("/join_discord")]
@@ -111,7 +111,7 @@ pub async fn handle(auth: AuthenticationCookie) -> Result<HttpResponse, Telescop
 
     // Make the call to add the verified role
     global_discord_client()
-        .add_member_role(rcos_discord_guild, discord_user_id, verified_role.0)
+        .add_member_role(rcos_discord_guild, discord_user_id, verified_role.0, Some("Add verified role"))
         .await
         .map_err(TelescopeError::serenity_error)?;
 
@@ -120,9 +120,9 @@ pub async fn handle(auth: AuthenticationCookie) -> Result<HttpResponse, Telescop
     // Therefore we need to add it manually
     let mut builder = EditMember::default();
     builder.nickname(nickname);
-    let map = utils::hashmap_to_json_map(builder.0);
+    let map = json::hashmap_to_json_map(builder.0);
     global_discord_client()
-        .edit_member(global_config().discord_config.rcos_guild_id(), discord_user_id, &map)
+        .edit_member(global_config().discord_config.rcos_guild_id(), discord_user_id, &map, Some("Change nickname to make sure it happened properly"))
         .await
         .map_err(TelescopeError::serenity_error)?;
 

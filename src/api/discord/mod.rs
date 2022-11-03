@@ -7,7 +7,10 @@ use serenity::model::id::RoleId;
 
 lazy_static! {
     static ref DISCORD_API_CLIENT: Http =
-        Http::new_with_token(global_config().as_ref().discord_config.bot_token.as_str());
+        Http::new_with_application_id(
+            global_config().as_ref().discord_config.bot_token.as_str(),
+            global_config().as_ref().discord_config.application_id
+            );
 }
 
 /// Get a reference to the global lazily evaluated static discord api client object.
