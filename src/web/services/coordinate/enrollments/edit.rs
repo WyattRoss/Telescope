@@ -1,20 +1,20 @@
 use crate::error::TelescopeError;
 use crate::templates::page::Page;
-use crate::api::rcos::users::enrollments::enrollment_by_ids::EnrollmentByIds;
 use crate::templates::Template;
 use actix_web::web::Form;
-use crate::api::rcos::users::enrollments::edit_enrollment::edit_enrollment::Variables;
-use crate::api::rcos::users::enrollments::edit_enrollment;
 use actix_web::web::{Path, ServiceConfig, HttpRequest};
 use crate::api::rcos::prelude::*;
 use serde::{
     de,
     Deserialize
 };
+use crate::api::rcos::users::enrollments::enrollment_by_ids::EnrollmentByIds;
+use crate::api::rcos::users::enrollments::edit_enrollment::edit_enrollment::Variables;
+use crate::api::rcos::users::enrollments::edit_enrollment;
 
 const ENROLLMENT_EDIT_FORM: &str = "coordinate/enrollments/edit/form";
 
-//there is one potential issue with this page, a ooordinator probably shouldn't be able to edit
+//there is one potential issue with this page, a coordinator probably shouldn't be able to edit
 //their own enrollment or the enrollments of other coordinators, while there won't be an edit
 //button on those restricted enrollments for coordinators, they can access the edit page for those
 //enrollments if they put in the url directly.  I don't have a solution for this right now

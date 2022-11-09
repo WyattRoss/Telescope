@@ -12,6 +12,7 @@ use crate::api::rcos::users::navbar_auth::Authentication;
 use uuid::Uuid;
 
 mod enrollments;
+mod assign_projects;
 //mod project_pitches;
 //mod meetings;
 
@@ -46,7 +47,7 @@ pub fn register(config: &mut ServiceConfig) {
         aweb::scope("/coordinate/")
         .wrap(coordinator_authorization_middleware)
         .configure(enrollments::register)
-//        .configure(semesters::register),
+        .configure(assign_projects::register)
         );
 }
 

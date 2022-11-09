@@ -1,4 +1,4 @@
-//! Meeting edit mutation and host selection query.
+//! Enrollment edit muation
 
 use crate::api::rcos::prelude::*;
 use crate::api::rcos::send_query;

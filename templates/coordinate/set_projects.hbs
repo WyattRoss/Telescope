@@ -1,0 +1,27 @@
+<div class="row justify-content-center no-gutters">
+    <div class="card text-dark col-sm-11 col-md-9 col-lg-8">
+        <div class="card-header">
+           <h1 class="card-title">
+                Edit {{user.first_name}} {{user.last_name}}'s enrollment in {{semester.title}}
+           </h1>
+        </div>
+        <div class="card-body">
+            <form onsubmit="return alert('Changes Saved!');" method="post">
+                <div class="form-group row">
+                    <label for="project-select" class="col-sm-3 col-form-label">Project:</label>
+                    <div class="col">
+                        <select class="form-control" name="project" id="project-select">
+                            <option>None</option>
+                            {{#each projects}}
+                                <option value={{project_id}} {{#if (eq project_id ../enrollments_by_pk.project_id)}} selected {{/if}}>{{title}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success w100">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

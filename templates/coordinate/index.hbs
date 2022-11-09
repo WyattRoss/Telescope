@@ -11,6 +11,7 @@
                 <th scope="col">End
                 <th scope="col">Project Pitches
                 <th scope="col">Enrollments
+                <th scope="col">
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,11 @@
                             </a>
                         </td>
                     {{/with}}
+                    <td>
+                        <a href="/coordinate/semesters/project_assignments/{{semesters.semester_id}}" class="btn btn-secondary">
+                        Bulk Assign Projects
+                        </a>
+                    </td>
                 </tr>
             {{/each}}
         </tbody>

@@ -10,7 +10,7 @@
             <form onsubmit="return alert('Changes Saved!');" method="post">
                 <div class="form-group">
                     <div class="form-check-inline">
-                        <input class="form-check-input" id="lead-select" name="lead" type="checkbox" value="true" {{#if is_project_lead}} checked {{/if}}/>
+                        <input class="form-check-input" {{#unless project_id}}disabled{{/unless}} id="lead-select" name="lead" type="checkbox" value="true" {{#if is_project_lead}} checked {{/if}}/>
                         <label for="lead-select" class="form-check-label">Project lead</label>
                     </div>
                     <div class="form-check-inline">
@@ -61,3 +61,13 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById("project-select").onchange = function(){
+            if(this.value === "None"){
+                document.getElementById("lead-select").disabled = true;
+            }
+            else{
+                document.getElementById("lead-select").disabled = false;
+            }
+        }
+</script>
