@@ -1,0 +1,6 @@
+query RawProjects {
+  projects(where: {}) {
+    project_id
+    title
+  }
+}

@@ -1,0 +1,6 @@
+mutation SetProjectsByIds($users: [uuid!], $semester_id: String!, $project_id: Int) {
+  update_enrollments(where: {semester_id: {_eq: $semester_id}, user_id: {_in: $users}}, _set: {project_id: $project_id}) {
+    affected_rows
+  }
+}
+
