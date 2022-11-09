@@ -1,0 +1,6 @@
+query UserAccountsLookup($account_type: user_account!, $account_ids: [String!]) {
+  user_accounts(where: {type: {_eq: $account_type}, _and: {account_id: {_in: $account_ids}}}) {
+    user_id
+  }
+}
+
